@@ -7,7 +7,8 @@ for eg : git commit -m "uesr signup - rm_issue #(3)"
 
 2) User who push commit on github has the same email address which is provided in redmine.
 
-3)In application.rb, config the secret_token field , for eg: config.secret_token: <%= ENV['GITHUB_REPO_TOKEN'] %>, Use the same token while creating webhook on github
+3)In application.rb, config the secret_token field , for eg:
+`config.secret_token: 'enter your secret key for github authentication'`, Use the same token while creating webhook on github
 
 4) Github -> Repo setting --> webhook --> In event, select send me everything or you can select "Let me select individual events" and inside check the checkbox for commit event and than create web hook.
 
