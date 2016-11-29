@@ -1,8 +1,8 @@
 class GithubCommitsController < ApplicationController
   unloadable
-  skip_before_filter :verify_authenticity_token
+skip_before_filter :verify_authenticity_token
   def create_comment
-    if params[:commits].present?
+    if params[:commits].present? && verify_signature?
       project = Project.find_by(identifier: params[:project_id])
       last_commit = params[:commits].first
       message = last_commit[:message]
@@ -16,5 +16,12 @@ class GithubCommitsController < ApplicationController
         issue.journals.create(journalized_id: issue_id, journalized_type: "Issue", user_id: user_id, notes: notes)
       end
     end
+  end
+
+  def verify_signature?
+    request.body.rewind
+    payload_body = request.body.read
+    signature = 'sha1=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha1'), Rails.configuration.secret_token, payload_body)
+    return Rack::Utils.secure_compare(signature, request.env['HTTP_X_HUB_SIGNATURE'])
   end
 end
