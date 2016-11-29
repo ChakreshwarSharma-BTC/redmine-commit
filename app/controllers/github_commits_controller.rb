@@ -1,22 +1,24 @@
 class GithubCommitsController < ApplicationController
   unloadable
-skip_before_filter :verify_authenticity_token
+  skip_before_filter :verify_authenticity_token
+
   def create_comment
     if params[:commits].present? && verify_signature?
       last_commit = params[:commits].first
       message = last_commit[:message]
       if message.present? && message.include?("rm_issue #")
         issue_id = message[(message.index("rm_issue #(")+11)..(message.index(")")-1)].to_i
-        issue = Issue.find_by id: issue_id
+        issue = Issue.find_by(id: issue_id)
       end
       email = EmailAddress.find_by(address: last_commit[:author][:email])
-      user_id = email.present? ? email.user.id : User.where(admin: true).first.id
+      user = email.present? ? email.user : User.where(admin: true).first
         
       if last_commit.present? && issue.present?
         notes = "Commit On Github with message: " + message + "  \"ViewOnGithub\":" + last_commit[:url]
-        issue.journals.create(journalized_id: issue_id, journalized_type: "Issue", user_id: user_id, notes: notes)
+        issue.journals.create(journalized_id: issue_id, journalized_type: "Issue", user: user, notes: notes)
       end
     end
+    render nothing: true, status: :ok, content_type: "text/html"
   end
 
   def verify_signature?
