@@ -14,7 +14,8 @@ class GithubCommitsController < ApplicationController
       user = email.present? ? email.user : User.where(admin: true).first
         
       if last_commit.present? && issue.present?
-        notes = "Commit On Github with message: " + message + "  \"ViewOnGithub\":" + last_commit[:url]
+        message.sub! issue_id.to_s, "Issue ##{issue_id}"
+        notes = "Commit On Github with message: " + message + "  \"View on GitHub\":" + last_commit[:url]
         issue.journals.create(journalized_id: issue_id, journalized_type: "Issue", user: user, notes: notes)
       end
     end
