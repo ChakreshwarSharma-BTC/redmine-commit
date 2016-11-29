@@ -1,6 +1,6 @@
 class GithubCommitsController < ApplicationController
   unloadable
-  skip_before_filter :verify_authenticity_token, :only => [:create_comment]
+  skip_before_filter :verify_authenticity_token
   def create_comment
     if params[:commits].present?
       project = Project.find_by(identifier: params[:project_id])
