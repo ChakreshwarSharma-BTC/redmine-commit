@@ -1,3 +1,8 @@
 = github_commits
 
-Description goes here
+Rull for use this plugin
+1) when user commits on github the commit message should include 
+    "issue #(issue_id)" and issue_id will be replace with the issue_id on redmine for which the commit is pushed.
+2) User who push commit on github has the same email address which is provided in redmine.
+3) for repository webhook should be created with payload-url as "http://localhost:3000/github_commits/create_comment?project_id=test"
+    where in url replace "http://localhost:3000" with your host address and replace "test" with the identifier of the project
