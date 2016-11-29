@@ -18,7 +18,7 @@ class GithubCommitsController < ApplicationController
         issue.journals.create(journalized_id: issue_id, journalized_type: "Issue", user: user, notes: notes)
       end
     end
-    render nothing: true, status: :ok, content_type: "text/html"
+    render nothing: true, status: :ok
   end
 
   def verify_signature?
