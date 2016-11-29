@@ -6,7 +6,7 @@ skip_before_filter :verify_authenticity_token
       project = Project.find_by(identifier: params[:project_id])
       last_commit = params[:commits].first
       message = last_commit[:message]
-      issue_id = message[(message.index("issue #(")+8)..(message.index(")")-1)].to_i
+      issue_id = message[(message.index("rm_issue #(")+8)..(message.index(")")-1)].to_i
       issue = Issue.find_by id: issue_id
       email = EmailAddress.find_by(address: last_commit[:author][:email])
       user_id = email.present? ? email.user.id : User.where(admin: true).first.id
